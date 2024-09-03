@@ -7,11 +7,11 @@ This script uses CPanel's endpoint `/DNS/mass_edit_zone` found [here](https://ap
 
 ## Contents
 1. [Setup](#Setup)
-    * [Records TXT Format](Records-TXT-Format)
-    * [CPanel API Key](Cpanel-API-Key)
-    * [Line Indexes](Line-Indexes)
-2. [Environment Variables](Environment-Variables)
-3. [Running the Script](Running-the-Script)
+    * [Records TXT Format](#Records-TXT-Format)
+    * [CPanel API Key](#Cpanel-API-Key)
+    * [Line Indexes](#Line-Indexes)
+2. [Environment Variables](#Environment-Variables)
+3. [Running the Script](#Running-the-Script)
 
 ## Setup
 Three files are required in the root of this application:
