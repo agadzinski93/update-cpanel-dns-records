@@ -1,5 +1,5 @@
 # Update CPanel DNS Records
-This script allows you to update many A records in a single DNS Zone in Cpanel using the CPanel API. This is great to use in a bash script on a remote server with a dynamic IP address.
+This script allows you to update many A records in a single DNS Zone in CPanel using the CPanel API. This is great to use in a bash script on a remote server with a dynamic IP address.
 
 As of now, only A records are supported.
 
@@ -39,12 +39,12 @@ dname=www.example
 ```
 
 ### CPanel API Key
-In order to may calls to the CPanel API, you must generate an API token in your account. This feature is likely under the Security section labeled Manage API Tokens.
+In order to may calls to the CPanel API, you must generate an API token in your account. This feature is likely under Security labeled Manage API Tokens.
 
-This key is a necessary environemnt variable but you may also need to use to determine the line indexes of the records you wish to modify.
+This key is a necessary environment variable but you may also need it to determine the line indexes of the records you wish to modify.
 
 ### Line Indexes
-To get the line-indexes of the DNS records you wish to update, use a tool like Postman to make a call to the endpoint `/DNS/parse_zone` found [here](https://api.docs.cpanel.net/openapi/cpanel/operation/dns-parse_zone/). Search through the JSON output until you found the records and save the line indexes in those objects.
+To get the line indexes of the DNS records you wish to update, use a tool like Postman to make a call to the endpoint `/DNS/parse_zone` found [here](https://api.docs.cpanel.net/openapi/cpanel/operation/dns-parse_zone/). Search through the JSON output until you found the records and save the line indexes.
 
 Note: When making API calls to CPanel, make sure the format for the Authorization header is `cpanel username:[token]`. Of course, replace `[token]` with your actual token.
 
@@ -64,7 +64,7 @@ Create a .env file in the root of this script.
     * Your CPanel API token.
 
 5. `ZONE`
-    * Your DNS Zone. Likely same as hostname. Do not include subdomains in this field even if that's all you intend to modify. Those distinctions will be made in your `records.txt`.
+    * Your DNS zone. Likely same as hostname. Do not include subdomains in this field even if that's all you intend to modify. Those distinctions will be made in your `records.txt`.
 
 ## Running the Script
 
