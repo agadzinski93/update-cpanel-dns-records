@@ -1,0 +1,8 @@
+.env
+
+newAddress.txt
+records.txt
+serial.txt
+nodeError.txt
+
+/node_modules
