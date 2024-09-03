@@ -1,6 +1,6 @@
 import { Records } from "../classes/Records/Records.js";
 
-test('Validate records have exactly 5 properties: line_number, dname, ttl, record_type, data', () => {
+test('Validate records have exactly 5 properties: line_index, dname, ttl, record_type, data', () => {
     const goodRecord = {
         line_index:100,
         dname:"www.example",

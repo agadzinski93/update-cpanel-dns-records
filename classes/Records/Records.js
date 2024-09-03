@@ -59,7 +59,6 @@ class Records {
                 let i = 0;
                 do {
                     if (prop === props[i]) {
-                        console.log('found');
                         found = true;
                         props.splice(i,1); //Ensures we don't recheck this prop in future iterations
                     } else if (!found && i === NUM_OF_PROPERTIES - 1) {

@@ -14,7 +14,7 @@ const updateARecord = async () => {
             Records.stringifyAndRemoveNewlines(RECORDS);
 
             const QUERY_PARAMETER = Records.generateQueryParameters(RECORDS);
-            let url = `https://${process.env.HOSTNAME}:${process.env.PORT}/execute/DNS/mass_edit_zone?serial=${serial}&zone=${process.env.ZONE}${QUERY_PARAMETER}`;
+            let url = `https://${process.env.CPANEL_HOSTNAME}:${process.env.PORT}/execute/DNS/mass_edit_zone?serial=${serial}&zone=${process.env.ZONE}${QUERY_PARAMETER}`;
             const output = await fetch(url,{
                 method:'GET',
                 headers: {
@@ -30,7 +30,7 @@ const updateARecord = async () => {
                     serial = msg.substring(indexOfSecondOpParanthesis+1, indexOfSecondEndParanthesis);
                     
                     if (serial) {
-                        url = `https://${process.env.HOSTNAME}:${process.env.PORT}/execute/DNS/mass_edit_zone?serial=${serial}&zone=${process.env.ZONE}${QUERY_PARAMETER}`;
+                        url = `https://${process.env.CPANEL_HOSTNAME}:${process.env.PORT}/execute/DNS/mass_edit_zone?serial=${serial}&zone=${process.env.ZONE}${QUERY_PARAMETER}`;
                         await fetch(url,{
                             method:'GET',
                             headers: {

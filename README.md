@@ -51,7 +51,7 @@ Note: When making API calls to CPanel, make sure the format for the Authorizatio
 ## Environment Variables
 Create a .env file in the root of this script.
 
-1. `HOSTNAME`
+1. `CPANEL_HOSTNAME`
     * Hostname for your CPanel account. Likely just the domain (e.g. example.com). Do NOT include the protocol.
 
 2. `PORT`
