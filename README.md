@@ -1,7 +1,9 @@
 # Update CPanel DNS Records
-This script allows you to update many A records in a single DNS Zone in CPanel using the CPanel API. This is great to use in a bash script on a remote server with a dynamic IP address.
+This script allows you to update many DNS records in a single DNS Zone in CPanel using the CPanel API. This is great to use in a bash script on a remote server with a dynamic IP address.
 
-As of now, only A records are supported.
+Supported DNS Records: A
+
+Soon: MX, CNAME, TXT
 
 This script uses CPanel's endpoint `/DNS/mass_edit_zone` found [here](https://api.docs.cpanel.net/openapi/cpanel/operation/dns-mass_edit_zone/).
 
@@ -39,7 +41,7 @@ dname=www.example
 ```
 
 ### CPanel API Key
-In order to may calls to the CPanel API, you must generate an API token in your account. This feature is likely under Security labeled Manage API Tokens.
+In order to make calls to the CPanel API, you must generate an API token in your account. This feature is likely under Security labeled Manage API Tokens.
 
 This key is a necessary environment variable but you may also need it to determine the line indexes of the records you wish to modify.
 
@@ -54,7 +56,7 @@ Create a .env file in the root of this script.
 1. `CPANEL_HOSTNAME`
     * Hostname for your CPanel account. Likely just the domain (e.g. example.com). Do NOT include the protocol.
 
-2. `PORT`
+2. `CPANEL_PORT`
     * Port for your CPanel account. Likely somewhere in the 2083-2087 range.
 
 3. `CPANEL_USERNAME`
@@ -71,7 +73,7 @@ Create a .env file in the root of this script.
 That's all there is. To execute this script, simply run
 ```
 npm install
-node start startup
+node start
 ```
 
 A sample bash script that uses this Node script can be seen below
@@ -84,5 +86,5 @@ sudo /usr/bin/dig +short myip.opendns.com @resolver1.opendns.com > /home/myAccou
 
 cd /home/myAccount/bin/path/to/NodeScript
 # You may need to make sure their is a symlink to npm for sudo to recognize it
-sudo npm start startup
+sudo npm start
 ```

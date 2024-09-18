@@ -1,0 +1,26 @@
+name: test
+on:
+    push:
+        branches: ["**"]
+    pull_request:
+        branches: ["**"]
+    workflow_dispatch:
+jobs:
+    test:
+        strategy:
+            matrix:
+                os: [ubuntu,windows]
+                node-version: [18.x,20.x]
+        name: ${{ matrix.os }} - ${{ matrix.node-version }}
+        runs-on: ${{ matrix.os }}-latest
+        steps:
+        - name: Checkout Repo
+          uses: actions/checkout@v4
+        - name: Use Node.js - ${{ matrix.node-version }}
+          uses: actions/setup-node@v4
+          with:
+            node-version: ${{ matrix.node-version }}
+        - name: Install Dependencies
+          run: npm ci
+        - name: Run Jest
+          run: npm test
