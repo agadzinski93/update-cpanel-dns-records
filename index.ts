@@ -1,27 +1,26 @@
-import { readFile, appendFile } from 'fs/promises';
+import { appendFile } from 'fs/promises';
 import 'dotenv/config.js';
 import { DnsRecord } from './classes/Record';
+import { Config } from './classes/Config';
+import { NORMAL, STARTUP, SHUTDOWN, CPANEL_HOSTNAME, CPANEL_PORT, ZONE } from './config/config';
 
 const updateDnsRecords = async () => {
     try {
-        const ADDRESS = await readFile('./newAddress.txt', { encoding: 'utf8' });
-        let serial = await readFile('./serial.txt', { encoding: 'utf8' });
-        const AUTHORIZATION_HEADER = `cpanel ${process.env.CPANEL_USERNAME}:${process.env.CPANEL_API_KEY}`;
-
         const file = await DnsRecord.openReadStream('records.txt');
         const RECORDS = await DnsRecord.generateRecordObjects(file);
         DnsRecord.closeFile(file);
-        DnsRecord.addDataToRecordObjects(RECORDS, ADDRESS);
+        DnsRecord.addDataToRecordObjects(RECORDS, Config.newValueA);
+
         if (DnsRecord.validateRecords(RECORDS)) {
             const STR_RECORDS = DnsRecord.stringifyAndRemoveNewlines(RECORDS);
 
             const QUERY_PARAMETER = DnsRecord.generateQueryParameters(STR_RECORDS);
-            let url = `https://${process.env.CPANEL_HOSTNAME}:${process.env.CPANEL_PORT}/execute/DNS/mass_edit_zone?serial=${serial}&zone=${process.env.ZONE}${QUERY_PARAMETER}`;
+            let url = `https://${CPANEL_HOSTNAME}:${CPANEL_PORT}/execute/DNS/mass_edit_zone?serial=${Config.serial}&zone=${ZONE}${QUERY_PARAMETER}`;
 
             const output = await fetch(url, {
                 method: 'GET',
                 headers: {
-                    "Authorization": AUTHORIZATION_HEADER
+                    "Authorization": Config.authorization_header
                 }
             });
             const final = await output.json();
@@ -30,14 +29,14 @@ const updateDnsRecords = async () => {
                     const msg = final.errors[0];
                     const indexOfSecondOpParanthesis = msg.indexOf('(', msg.indexOf('(') + 1);
                     const indexOfSecondEndParanthesis = msg.indexOf(')', msg.indexOf(')') + 1);
-                    serial = msg.substring(indexOfSecondOpParanthesis + 1, indexOfSecondEndParanthesis);
+                    Config.serial = msg.substring(indexOfSecondOpParanthesis + 1, indexOfSecondEndParanthesis);
 
-                    if (serial) {
-                        url = `https://${process.env.CPANEL_HOSTNAME}:${process.env.CPANEL_PORT}/execute/DNS/mass_edit_zone?serial=${serial}&zone=${process.env.ZONE}${QUERY_PARAMETER}`;
+                    if (Config.serial) {
+                        url = `https://${CPANEL_HOSTNAME}:${CPANEL_PORT}/execute/DNS/mass_edit_zone?serial=${Config.serial}&zone=${ZONE}${QUERY_PARAMETER}`;
                         await fetch(url, {
                             method: 'GET',
                             headers: {
-                                "Authorization": AUTHORIZATION_HEADER
+                                "Authorization": Config.authorization_header
                             }
                         });
                     }
@@ -54,20 +53,22 @@ const updateDnsRecords = async () => {
         }
         process.exit(1);
     }
-
 }
-
 (async () => {
-    if (process.argv.length === 3) {
-        switch (process.argv[2]) {
-            case 'startup':
-                await updateDnsRecords();
-                break;
-            case 'shutdown':
-                break;
-            default:
-        }
-    } else {
-        await updateDnsRecords();
+    Config.initWithArgs(process.argv);
+    await Config.initWithFiles();
+
+    Config.setAuthHeader();
+    Config.setSerial();
+
+    switch (Config.runWhen) {
+        case NORMAL:
+            await updateDnsRecords();
+            break;
+        case STARTUP:
+            break;
+        case SHUTDOWN:
+            break;
+        default:
     }
 })();
