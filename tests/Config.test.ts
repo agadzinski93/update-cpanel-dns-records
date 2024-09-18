@@ -106,9 +106,9 @@ describe('Initialize configuration using process.argv', () => {
     test('Run script at startup and defines only A records: npm start a 1.1.1.1 startup', () => {
         const process_argv = [
             ...FIRST_PARAMS_IN_ARGV,
-            'startup',
             'a',
-            '1.1.1.1'
+            '1.1.1.1',
+            'startup'
         ]
         Config.initWithArgs(process_argv);
         expect(Config.newValueA).toBe('1.1.1.1');
