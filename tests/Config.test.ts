@@ -1,5 +1,5 @@
 import type { Config as ConfigType } from "../classes/Config";
-import { NORMAL, STARTUP } from "../config/config";
+import { GET_ZONE, EDIT_ZONE, NORMAL, STARTUP } from "../config/config";
 
 //As of now, NodeJS populates the first two indices in process.argv, we wish to include them for testing
 const FIRST_PARAMS_IN_ARGV = ['skip', 'skip'];
@@ -20,6 +20,15 @@ describe('Initialize configuration using process.argv', () => {
         })
     });
 
+    test('Check if user chooses the get_zone script: npm start get_zone', () => {
+        const process_argv = [
+            ...FIRST_PARAMS_IN_ARGV,
+            GET_ZONE
+        ]
+        expect(Config.run).toBe(EDIT_ZONE);
+        Config.chooseScript(process_argv);
+        expect(Config.run).toBe(GET_ZONE);
+    });
     test('Only A record defined when calling script: npm start a 1.1.1.1', () => {
         const process_argv = [
             ...FIRST_PARAMS_IN_ARGV,

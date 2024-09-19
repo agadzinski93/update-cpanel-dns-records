@@ -197,5 +197,4 @@ class DnsRecord {
         return output;
     }
 }
-
 export { DnsRecord };

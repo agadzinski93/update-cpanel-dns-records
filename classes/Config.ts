@@ -1,22 +1,41 @@
 import { readFile } from "fs/promises";
 import {
-    CPANEL_USERNAME,
-    CPANEL_API_KEY,
+    GET_ZONE,
+    EDIT_ZONE,
     NORMAL,
     STARTUP,
-    SHUTDOWN
-}
-    from "../config/config";
+    SHUTDOWN,
+    A_RECORD_FILE,
+    MX_RECORD_FILE,
+    CNAME_RECORD_FILE,
+    TXT_RECORD_FILE,
+    SERIAL_FILE,
+    FILE_ENCODING
+} from "../config/config";
 
 class Config {
-    static runWhen: 'normal' | 'startup' | 'shutdown' = 'normal';
+    static run: typeof GET_ZONE | typeof EDIT_ZONE = EDIT_ZONE;
+    static runWhen: typeof NORMAL | typeof STARTUP | typeof SHUTDOWN = NORMAL;
     static newValueA: string;
     static newValueMx: String;
     static newValueCname: String;
     static newValueTxt: String;
     static serial: string;
-    static authorization_header: string
 
+    /*
+        Check if user selected the GET_ZONE script: npm start get_zone
+    */
+    static chooseScript(args: string[]) {
+        if (args.length === 3) {
+            switch (args[2].toLowerCase()) {
+                case GET_ZONE:
+                    Config.run = GET_ZONE;
+                    break;
+                default:
+                    Config.run = EDIT_ZONE;
+            }
+        }
+    }
     static initWithArgs(args: string[]) {
         /*
             Search for args passed into script in process.argv starting with index 2
@@ -28,6 +47,7 @@ class Config {
             switch (args[i].toLowerCase()) {
                 case NORMAL:
                     Config.runWhen = NORMAL;
+                    break;
                 case STARTUP:
                     Config.runWhen = STARTUP;
                     break;
@@ -61,47 +81,43 @@ class Config {
         }
         if (!Config.newValueA) {
             try {
-                Config.newValueA = await readFile('./newValueA.txt', { encoding: 'utf8' });
+                Config.newValueA = await readFile(A_RECORD_FILE, { encoding: FILE_ENCODING });
             } catch (err) {
                 if (err instanceof Error) printFileError(err);
             }
         }
         if (!Config.newValueMx) {
             try {
-                Config.newValueMx = await readFile('./newValueMx.txt', { encoding: 'utf8' });
+                Config.newValueMx = await readFile(MX_RECORD_FILE, { encoding: FILE_ENCODING });
             } catch (err) {
                 if (err instanceof Error) printFileError(err);
             }
         }
         if (!Config.newValueCname) {
             try {
-                Config.newValueCname = await readFile('./newValueCname.txt', { encoding: 'utf8' });
+                Config.newValueCname = await readFile(CNAME_RECORD_FILE, { encoding: FILE_ENCODING });
             } catch (err) {
                 if (err instanceof Error) printFileError(err);
             }
         }
         if (!Config.newValueTxt) {
             try {
-                Config.newValueTxt = await readFile('./newValueTxt.txt', { encoding: 'utf8' });
+                Config.newValueTxt = await readFile(TXT_RECORD_FILE, { encoding: FILE_ENCODING });
             } catch (err) {
                 if (err instanceof Error) printFileError(err);
             }
         }
-    }
-    static setAuthHeader() {
-        Config.authorization_header = `cpanel ${CPANEL_USERNAME}:${CPANEL_API_KEY}`;
     }
     static async setSerial() {
         /*
            Populate Serial Value (Users can get this number from their SOA record)
        */
         try {
-            Config.serial = await readFile('./serial.txt', { encoding: 'utf8' });
+            Config.serial = await readFile(SERIAL_FILE, { encoding: FILE_ENCODING });
         } catch (err) {
             if (err instanceof Error) console.error(err.message);
             process.exit(1);
         }
     }
 }
-
 export { Config };

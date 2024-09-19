@@ -1,9 +1,15 @@
 .env
 
-newAddress.txt
+newValueA.txt
+newValueCname.txt
+newValueMx.txt
+newValueTxt.txt
+
 records.txt
 serial.txt
 nodeError.txt
+
+zone.json
 
 /node_modules
 /dist
