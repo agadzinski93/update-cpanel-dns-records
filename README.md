@@ -125,9 +125,9 @@ Simply place the new value into the corresponding text file and nothing else.
 
 ## CPanel API Key
 
-In order to make calls to the CPanel API, you must generate an API token in your account. This feature is likely under Security labeled Manage API Tokens.
+In order to make calls to the CPanel API, you must generate an API token in your account. This feature is likely [Manage API Tokens](https://docs.cpanel.net/knowledge-base/security/how-to-use-cpanel-api-tokens/).
 
-This key is a necessary environment variable but you may also need it to determine the line indexes of the records you wish to modify.
+This key is a necessary environment variable.
 
 ## Get DNS Records
 
@@ -166,7 +166,7 @@ A sample bash script that uses this Node script can be seen below
 sudo /usr/bin/dig +short my-domain.com soa | awk '{ print $3 }' > /home/myAccount/bin/path/to/NodeScript/serial.txt 2>error.txt
 
 # Grab the public IP address for your server. Useful when using AWS EC2 instances.
-sudo /usr/bin/dig +short myip.opendns.com @resolver1.opendns.com > /home/myAccount/bin/path/to/NodeScript/updateAddress.txt 2>error.txt
+sudo /usr/bin/dig +short myip.opendns.com @resolver1.opendns.com > /home/myAccount/bin/path/to/NodeScript/newValueA.txt 2>error.txt
 
 cd /home/myAccount/bin/path/to/NodeScript
 # You may need to make sure their is a symlink to npm for sudo to recognize it
